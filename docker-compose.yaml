@@ -1,0 +1,49 @@
+version: '3'  # Adjust the version as needed
+
+networks:
+  private-network:  # Define a custom network
+    driver: bridge  # You can use other drivers depending on your requirements
+
+
+services:
+  acme-bundit:
+    container_name: acme-bundit
+    image: acme-bundit
+    ports:
+      - 8080:3000
+    networks:
+      - private-network
+
+  web:
+    container_name: web
+    image: nginx
+    ports:
+      - 8082:80
+    networks:
+      - private-network
+      
+  acmeaudit:
+    container_name: acme-audit
+    image: public.ecr.aws/f4q1i2m2/acmeaudit
+    ports:
+      - "8081:3000"
+    networks:
+      - private-network
+
+  agent-container:
+    image: checkpoint/cloudguard-appsec-standalone
+    container_name: agent-container
+    volumes:
+      - ./cp-conf:/etc/cp/conf
+      - ./cp-data:/etc/cp/data
+      - ./cp-logs:/var/log/nano_agent
+      - ./cp-nginx:/etc/nginx/conf.d/
+      - ./cp-certs:/etc/certs/
+    ports:
+      - "8443:443"
+      - "80:80"
+      - "8888:80"
+      - "8117:8117"
+    networks:
+      - private-network
+    command: /cloudguard-appsec-standalone --token "$CPTOKEN"

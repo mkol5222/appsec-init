@@ -1,0 +1,37 @@
+users:
+  - default
+  - name: vmuser
+    groups: docker
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbtIKTbynBnRqOg/XJ5cdPsWVCFOIWBqETJlzZFwbJB2RKK3hiiUugOMzJDapOlyjpArRSsg567F3cw6cW8qoiZl6VR0hwNuxxBqa30MmACkI4aD1dmP8fZqW2KsmDUe/p7fivb/E7czuLPPbdnrrCReGtfSXvloXGpt8imSSwaOBeiDxeUCz2S3iaZfSdbWU8UzAdWtGyOo8KE/ivmfTfur/tECsx19HpSKNxBEWnTVPl1xUDQ7Ywu0z23/JwGwoQT4LPuwa0XSjBGpLpogdiEYRzV95ZOIaxncoKHz59/INct4JRHIHekrB3PsR1BDDeNcXG2ek7u1OKNlbabaJYl75YTiPvA+zSKqLpElnVwqsikqFE7GnCYcgvUFHT9XwUGFSCs4UV82PPXI7IlS8bZY3U0EhMWfaU9HH0yxPFanxK9No7Bo4TCtLXn4mmA1wf33+lCNXlhagqZA7Mdz9I98dRWYfrv6qrgvqVfQdHWI6nG/xfM16Akjqk6b860EWTRDXxHYcP+2rnBGejO+1LKDGyr1NZDIwA04/sGJd8mO37aTXJuBIJJq4koxDQOYmK1La5ZdYUJeFOcp9QUIxkOYL6g5zxuziGw092L6hSLXv61Rtsadj7BTtUCGyju1w/ua0kmPt+sj5qHh5voBDzFujHLNU3zkibrGz/Dme5xw==
+
+package_update: true
+package_upgrade: true
+
+groups:
+  - docker
+
+system_info:
+  default_user:
+    groups: [ docker ]
+
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+  - unattended-upgrades
+
+runcmd:
+  - mkdir -p /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  - systemctl enable docker
+  - systemctl start docker
+
+final_message: "The system is finally up, after $UPTIME seconds"

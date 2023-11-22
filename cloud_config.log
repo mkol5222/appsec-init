@@ -1,0 +1,180 @@
+2023-09-15 07:09:35,369::INFO::Started cloud_config
+2023-09-15 07:09:35,370::INFO::Logger initialized successfully
+2023-09-15 07:09:35,370::INFO::Reading template variables
+2023-09-15 07:09:35,370::INFO::Reading template variables from /tmp/user-data-ZL9xm/cloud-user-data
+2023-09-15 07:09:35,370::INFO::Initialized template variables:
+2023-09-15 07:09:35,370::INFO::{'installationType': 'waap', 'allowUploadDownload': False, 'osVersion': 'R8040', 'templateName': 'checkpoint_waap', 'isBlink': True, 'templateVersion': '20211111', 'bootstrapScript64': '', 'location': 'westeurope', 'sicKey': '', 'waapAgentToken': '*****', 'waapAgentFog': ''}
+2023-09-15 07:09:35,370::INFO::Running bootstrap script
+2023-09-15 07:09:35,371::INFO::There is no input bootstrap script to run
+2023-09-15 07:09:35,371::INFO::Trying to create instance
+2023-09-15 07:09:35,371::INFO::WAAP installation type - creating a WAAP instance object
+2023-09-15 07:09:35,371::INFO::runcmd Executing: curl_cli -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" with:
+	data=None
+	env=None
+	expected_return_codes=(0,)
+2023-09-15 07:09:35,429::INFO::Return code= 0
+	Output={"compute":{"location":"westeurope","name":"appsec","offer":"infinity-gw","osType":"Linux","placementGroupId":"","platformFaultDomain":"0","platformUpdateDomain":"0","publisher":"checkpoint","resourceGroupName":"rg-appsec","sku":"infinity-img","subscriptionId":"f4ad5e85-ec75-4321-8854-ed7eb611f61d","tags":"chkp-lz-create-date:2023-09-15T07:05:54.1472395Z","version":"8040.900294.0826","vmId":"2446fb6c-89b0-4b7a-af95-b2e861032dea","vmSize":"Standard_DS2_v2"},"network":{"interface":[{"ipv4":{"ipAddress":[{"privateIpAddress":"10.0.0.4","publicIpAddress":"40.91.251.13"}],"subnet":[{"address":"10.0.0.0","prefix":"24"}]},"ipv6":{"ipAddress":[]},"macAddress":"6045BD984032"},{"ipv4":{"ipAddress":[{"privateIpAddress":"10.0.1.4","publicIpAddress":""}],"subnet":[{"address":"10.0.1.0","prefix":"24"}]},"ipv6":{"ipAddress":[]},"macAddress":"6045BD984868"}]}}
+2023-09-15 07:09:35,430::INFO::Starting instance configurations
+2023-09-15 07:09:35,430::INFO::The content of /etc/cloud-version is: 
+2023-09-15 07:09:35,430::INFO::release: R80.40
+take: 294
+build: 000
+platform: azure
+license: gaia
+deployment_method: GW
+
+2023-09-15 07:09:35,430::INFO::The content of /etc/cloud-version is: 
+2023-09-15 07:09:35,430::INFO::release: R80.40
+take: 294
+build: 000
+platform: azure
+license: gaia
+deployment_method: GW
+template_name: checkpoint_waap
+template_version: 20211111
+template_type: marketplace
+
+2023-09-15 07:09:35,446::INFO::The content of /etc/cloud-version.json is: 
+2023-09-15 07:09:35,446::INFO::{
+    "projects": {
+        "cge": {
+            "branch": "dev",
+            "commit": "fdd3fae870a557f8a9bcdba4326076e99539a7ad"
+        },
+        "cloud-connectors": {
+            "branch": "master",
+            "commit": "f2587c4029c5d68893dfe623bc81d18c995466c7"
+        },
+        "cloud-devops": {
+            "branch": "master",
+            "commit": "e67ef3d3a088c6e612a37a03e6929589edcbdfd8"
+        }
+    },
+    "release": "R80.40",
+    "take": "294",
+    "build": "000",
+    "platform": "azure",
+    "license": "gaia",
+    "deployment_method": "GW",
+    "template_name": "checkpoint_waap",
+    "template_version": "20211111",
+    "template_type": "marketplace"
+}
+2023-09-15 07:09:35,446::INFO::Image type is Blink
+2023-09-15 07:09:35,446::INFO::Executing Blink configuration
+2023-09-15 07:09:35,446::INFO::runcmd Executing: blink_config -s "gateway_cluster_member=false&download_info=false&upload_info=false&ftw_sic_key=" with:
+	data=None
+	env=None
+	expected_return_codes=(0,)
+2023-09-15 07:09:37,602::INFO::Return code= 0
+	Output=
+Validating configuration file:	Done
+Configuring OS parameters:	Done
+
+Blink configuration was completed!
+
+
+2023-09-15 07:09:37,602::INFO::VM public address is: 40.91.251.13
+2023-09-15 07:09:37,602::INFO::runcmd Executing: clish -s -c "lock database override" with:
+	data=None
+	env=None
+	expected_return_codes=(0, 1)
+2023-09-15 07:09:38,025::INFO::Return code= 1
+	Output=CLICMD0201  Config lock is already turned on.
+
+2023-09-15 07:09:38,026::INFO::runcmd Executing: clish -s -c "add interface eth0 alias 40.91.251.13/32" with:
+	data=None
+	env=None
+	expected_return_codes=(0,)
+2023-09-15 07:09:38,575::ERROR::-- Failed to set alias for eth0
+2023-09-15 07:09:38,575::ERROR::-- Error message: failed to run_local clish -s -c "add interface eth0 alias 40.91.251.13/32": 1
+
+NMSETH0039  Address 40.91.251.13 is already in use by Interface eth0.
+
+2023-09-15 07:09:38,575::INFO::Retrieved instance metadata:
+
+2023-09-15 07:09:38,575::INFO::{
+    "compute": {
+        "location": "westeurope",
+        "name": "appsec",
+        "offer": "infinity-gw",
+        "osType": "Linux",
+        "placementGroupId": "",
+        "platformFaultDomain": "0",
+        "platformUpdateDomain": "0",
+        "publisher": "checkpoint",
+        "resourceGroupName": "rg-appsec",
+        "sku": "infinity-img",
+        "subscriptionId": "f4ad5e85-ec75-4321-8854-ed7eb611f61d",
+        "tags": "chkp-lz-create-date:2023-09-15T07:05:54.1472395Z",
+        "version": "8040.900294.0826",
+        "vmId": "2446fb6c-89b0-4b7a-af95-b2e861032dea",
+        "vmSize": "Standard_DS2_v2"
+    },
+    "network": {
+        "interface": [
+            {
+                "ipv4": {
+                    "ipAddress": [
+                        {
+                            "privateIpAddress": "10.0.0.4",
+                            "publicIpAddress": "40.91.251.13"
+                        }
+                    ],
+                    "subnet": [
+                        {
+                            "address": "10.0.0.0",
+                            "prefix": "24"
+                        }
+                    ]
+                },
+                "ipv6": {
+                    "ipAddress": []
+                },
+                "macAddress": "6045BD984032"
+            },
+            {
+                "ipv4": {
+                    "ipAddress": [
+                        {
+                            "privateIpAddress": "10.0.1.4",
+                            "publicIpAddress": ""
+                        }
+                    ],
+                    "subnet": [
+                        {
+                            "address": "10.0.1.0",
+                            "prefix": "24"
+                        }
+                    ]
+                },
+                "ipv6": {
+                    "ipAddress": []
+                },
+                "macAddress": "6045BD984868"
+            }
+        ]
+    }
+}
+2023-09-15 07:09:38,576::INFO::Initialize the WAAP
+2023-09-15 07:09:38,576::INFO::runcmd Executing: /opt/CPWAAP/init_waap.sh with:
+	data=None
+	env=None
+	expected_return_codes=(0,)
+2023-09-15 07:09:54,100::INFO::Return code= 0
+	Output=
+2023-09-15 07:09:54,100::INFO::Start the WAAP agent
+2023-09-15 07:09:54,100::INFO::runcmd Executing: chkconfig --add /etc/init.d/zzzz_install_appsec with:
+	data=None
+	env=None
+	expected_return_codes=(0,)
+2023-09-15 07:09:54,106::INFO::Return code= 0
+	Output=
+2023-09-15 07:09:54,107::INFO::Rebooting...
+2023-09-15 07:09:54,107::INFO::runcmd Executing: shutdown -r now with:
+	data=None
+	env=None
+	expected_return_codes=(0,)
+2023-09-15 07:09:59,686::INFO::Return code= 0
+	Output=
+2023-09-15 07:09:59,687::INFO::cloud_config finished successfully
