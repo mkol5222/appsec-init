@@ -4,15 +4,21 @@ networks:
   private-network:  # Define a custom network
     driver: bridge  # You can use other drivers depending on your requirements
 
+volumes:
+  cp-conf:
+  cp-data:
+  cp-logs:
+  cp-nginx:
+  cp-certs:
 
 services:
-  acme-bundit:
-    container_name: acme-bundit
-    image: acme-bundit
-    ports:
-      - 8080:3000
-    networks:
-      - private-network
+  # acme-bundit:
+  #   container_name: acme-bundit
+  #   image: acme-bundit
+  #   ports:
+  #     - 8080:3000
+  #   networks:
+  #     - private-network
 
   web:
     container_name: web
@@ -34,11 +40,11 @@ services:
     image: checkpoint/cloudguard-appsec-standalone
     container_name: agent-container
     volumes:
-      - ./cp-conf:/etc/cp/conf
-      - ./cp-data:/etc/cp/data
-      - ./cp-logs:/var/log/nano_agent
-      - ./cp-nginx:/etc/nginx/conf.d/
-      - ./cp-certs:/etc/certs/
+      - cp-conf:/etc/cp/conf
+      - cp-data:/etc/cp/data
+      - cp-logs:/var/log/nano_agent
+      - cp-nginx:/etc/nginx/conf.d/
+      - cp-certs:/etc/certs/
     ports:
       - "8443:443"
       - "80:80"
