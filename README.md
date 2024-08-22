@@ -19,6 +19,8 @@ cd ; docker compose  -f ./w/docker-compose.yaml up -d
 docker compose  -f ./w/docker-compose.yaml logs -ft 
 
 
+# Connect to the VM - one more terminal
+multipass shell appsecvm
 # diag
 docker exec -it agent-container cpnano -s
 docker exec -it agent-container nginx -V 
@@ -27,7 +29,18 @@ docker exec -it agent-container curl web
 docker exec -it agent-container curl 172.17.0.1:8081
 
 # incident
- curl '127.0.0.1/?q=UNION+1=1'
+curl '127.0.0.1/?q=UNION+1=1'
+# no incident
+curl '127.0.0.1/?q=hello'
+
+# some response code stats
+for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=UNION+1=1'; echo; done | sort | uniq -c | sort
+
+for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
+docker stop web
+for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
+docker start web
+for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
 
 # cleanup
 multipass delete appsecvm -p
