@@ -28,6 +28,8 @@ docker exec -it agent-container nginx -T
 docker exec -it agent-container curl web
 docker exec -it agent-container curl 172.17.0.1:8081
 
+docker exec -it agent-container bash
+
 docker exec -it agent-container find /var/log/nginx/ -type f
 docker exec -it agent-container tail -F /var/log/nginx/accessLog_80_127.0.0.1.log
 docker exec -it agent-container tail -F /var/log/nginx/access.log
