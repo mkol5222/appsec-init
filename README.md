@@ -44,6 +44,7 @@ curl '127.0.0.1/?q=hello'
 for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=UNION+1=1'; echo; done | sort | uniq -c | sort
 
 for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
+
 docker stop web
 for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok' -m1; echo; done | sort | uniq -c | sort
 docker start web
