@@ -28,6 +28,11 @@ docker exec -it agent-container nginx -T
 docker exec -it agent-container curl web
 docker exec -it agent-container curl 172.17.0.1:8081
 
+docker exec -it agent-container find /var/log/nginx/ -type f
+docker exec -it agent-container tail -F /var/log/nginx/accessLog_80_127.0.0.1.log
+docker exec -it agent-container tail -F /var/log/nginx/access.log
+docker exec -it agent-container tail -F /var/log/nginx/error.log
+
 # incident
 curl '127.0.0.1/?q=UNION+1=1'
 # no incident
@@ -38,9 +43,9 @@ for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=UN
 
 for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
 docker stop web
-for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
+for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok' -m1; echo; done | sort | uniq -c | sort
 docker start web
-for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok'; echo; done | sort | uniq -c | sort
+for ((n=0;n<50;n++)); do curl -s -o /dev/null -w "%{http_code}" '127.0.0.1/?q=ok' -m1; echo; done | sort | uniq -c | sort
 
 # cleanup
 multipass delete appsecvm -p
