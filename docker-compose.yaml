@@ -19,7 +19,13 @@ services:
   #     - 8080:3000
   #   networks:
   #     - private-network
-
+  resty:
+    container_name: resty
+    build: ./openresty
+    ports:
+      - 8080:80
+    networks:
+      - private-network
   web:
     container_name: web
     image: nginx
